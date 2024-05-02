@@ -69,7 +69,7 @@ function WeatherApp() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        background: isDarkMode ? "#212121" : "#fff", // Set background based on dark mode state
+        background: isDarkMode ? "#48494B" : "#fff", // Set background based on dark mode state
         color: isDarkMode ? "#fff" : "#212121", // Set text color based on dark mode state
       }}
     >

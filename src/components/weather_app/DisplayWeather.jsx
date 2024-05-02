@@ -109,7 +109,7 @@ function DisplayWeather(props) {
             }}
             style={{
               cursor: "pointer",
-              border: selectedDay === day ? "2px solid blue" : "none",
+              border: selectedDay === day ? "2px solid black" : "none",
               borderRadius: "5px",
               padding: "5px",
             }}
