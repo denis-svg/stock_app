@@ -1,6 +1,12 @@
 import { TextField, Button, Grid } from "@mui/material";
 
 function SearchBar(props) {
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      props.handleSubmit(event);
+    }
+  };
+
   return (
     <Grid container spacing={2} alignItems="center">
       <Grid item>
@@ -9,17 +15,9 @@ function SearchBar(props) {
           label="Search by City"
           variant="outlined"
           onChange={props.handleChange}
+          onKeyPress={handleKeyPress}
           value={props.input}
         />
-      </Grid>
-      <Grid item>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={props.handleSubmit}
-        >
-          Submit
-        </Button>
       </Grid>
     </Grid>
   );
