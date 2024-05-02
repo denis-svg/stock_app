@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import DisplayWeather from "./DisplayWeather";
-import { Typography, Grid } from "@mui/material";
+import { Typography, Grid, IconButton } from "@mui/material";
 import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
 
 function WeatherApp() {
   const [isChecked, setIsChecked] = useState(false);
@@ -16,11 +17,17 @@ function WeatherApp() {
   const [weatherForecast, setWeatherForecast] = useState(null);
   const [city, setCity] = useState("Chisinau");
   const day = useSelector((state) => state.day);
+  const [isDarkMode, setIsDarkMode] = useState(true); // Track dark mode state
+
   const handleChange = (event) => {
     setInput(event.target.value);
   };
   const handleCheckBox = (event) => {
     setIsChecked(event.target.checked);
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
   const handleSubmit = async (event) => {
@@ -62,8 +69,16 @@ function WeatherApp() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        background: isDarkMode ? "#212121" : "#fff", // Set background based on dark mode state
+        color: isDarkMode ? "#fff" : "#212121", // Set text color based on dark mode state
       }}
     >
+      <IconButton
+        onClick={toggleDarkMode}
+        style={{ position: "absolute", top: "20px", right: "20px" }} // Position button in top right corner
+      >
+        <Brightness4Icon />
+      </IconButton>
       <Grid container direction="column" alignItems="center" spacing={3}>
         <Grid
           item
@@ -83,13 +98,19 @@ function WeatherApp() {
             input={input}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            darkMode={isDarkMode}
           />
-          <CheckBox isChecked={isChecked} handleChange={handleCheckBox} />
+          <CheckBox
+            isChecked={isChecked}
+            handleChange={handleCheckBox}
+            darkMode={isDarkMode}
+          />
         </Grid>
         <Grid item>
           <DisplayWeather
             weatherForecast={weatherForecast}
             isChecked={isChecked}
+            darkMode={isDarkMode}
           />
         </Grid>
       </Grid>

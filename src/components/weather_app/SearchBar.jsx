@@ -1,4 +1,4 @@
-import { TextField, Button, Grid } from "@mui/material";
+import { TextField, Grid } from "@mui/material";
 
 function SearchBar(props) {
   const handleKeyPress = (event) => {
@@ -17,6 +17,12 @@ function SearchBar(props) {
           onChange={props.handleChange}
           onKeyPress={handleKeyPress}
           value={props.input}
+          inputProps={{
+            style: { color: props.darkMode ? "white" : "inherit" },
+          }}
+          InputLabelProps={{
+            style: { color: props.darkMode ? "white" : "inherit" },
+          }}
         />
       </Grid>
     </Grid>

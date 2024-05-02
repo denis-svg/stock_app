@@ -46,7 +46,8 @@ function DisplayWeather(props) {
       return (
         <div
           style={{
-            backgroundColor: "white",
+            backgroundColor: props.darkMode ? "rgba(0, 0, 0, 0.8)" : "white", // Adjust background color for dark mode
+            color: props.darkMode ? "white" : "black", // Adjust text color for dark mode
             padding: "3px",
             fontSize: "0.8rem",
           }}
