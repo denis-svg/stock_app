@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { AreaChart, Area, XAxis, Tooltip } from "recharts";
 import { Typography, Grid } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setNew } from "../state/daySlice";
 
 function DisplayWeather({ weatherForecast }) {
   if (weatherForecast === null)
     return <Typography variant="h4">Input a weather forecast</Typography>;
 
   const [selectedDay, setSelectedDay] = useState(null);
-
+  const dispach = useDispatch();
   const organizeDataByDay = () => {
     const days = {};
     weatherForecast.forEach((forecast) => {
@@ -93,7 +95,10 @@ function DisplayWeather({ weatherForecast }) {
           <Grid
             item
             key={day}
-            onClick={() => handleDayClick(day)}
+            onClick={() => {
+              handleDayClick(day);
+              dispach(setNew({ day: day, date: getDayOfWeek(day) }));
+            }}
             style={{
               cursor: "pointer",
               border: selectedDay === day ? "2px solid blue" : "none",

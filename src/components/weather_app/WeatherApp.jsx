@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import axios from "axios";
 import DisplayWeather from "./DisplayWeather";
 import { Typography, Grid } from "@mui/material";
+import { useSelector } from "react-redux";
 
 function WeatherApp() {
   const [input, setInput] = useState("");
@@ -11,7 +12,8 @@ function WeatherApp() {
     longitude: 28.8322923,
   });
   const [weatherForecast, setWeatherForecast] = useState(null);
-
+  const [city, setCity] = useState("Chisinau");
+  const day = useSelector((state) => state.day);
   const handleChange = (event) => {
     setInput(event.target.value);
   };
@@ -39,6 +41,7 @@ function WeatherApp() {
           `http://api.openweathermap.org/data/2.5/forecast?units=Metric&lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`
         );
         setWeatherForecast(response.data.list);
+        setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
       } catch (error) {
         console.log(error);
       }
@@ -56,8 +59,18 @@ function WeatherApp() {
       }}
     >
       <Grid container direction="column" alignItems="center" spacing={3}>
-        <Grid item>
-          <Typography variant="h4">Weather Forecast</Typography>
+        <Grid
+          item
+          container
+          justifyContent="center"
+          alignItems="center"
+          direction="column"
+          spacing={3}
+        >
+          <Typography variant="h3">Weather Forecast</Typography>
+          <Typography variant="h6">
+            {city} {day.day} {day.date}
+          </Typography>
         </Grid>
         <Grid item>
           <SearchBar
