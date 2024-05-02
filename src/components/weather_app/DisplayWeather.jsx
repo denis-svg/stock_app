@@ -42,7 +42,13 @@ function DisplayWeather({ weatherForecast }) {
     if (active && payload && payload.length) {
       const forecast = payload[0].payload;
       return (
-        <div style={{ backgroundColor: "white", padding: "5px" }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "3px",
+            fontSize: "0.8rem",
+          }}
+        >
           <p>Time: {forecast.dt_txt.split(" ")[1]}</p>
           <p>Temperature: {forecast.main.temp}°C</p>
           <p>Feels like: {forecast.main.feels_like}°C</p>
