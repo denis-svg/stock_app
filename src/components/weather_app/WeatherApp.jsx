@@ -1,6 +1,7 @@
-import { useState } from "react";
-import SearchBar from "../SearchBar";
+import { useEffect, useState } from "react";
+import SearchBar from "./SearchBar";
 import axios from "axios";
+import DispayWeather from "./DisplayWeather";
 
 function WeatherApp() {
   const [input, setInput] = useState("");
@@ -8,6 +9,7 @@ function WeatherApp() {
     latitude: 47.0245117,
     longitude: 28.8322923,
   });
+  const [weatherForecast, setWeatherForecast] = useState(null);
   const handleChange = (event) => {
     setInput(event.target.value);
   };
@@ -27,6 +29,22 @@ function WeatherApp() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const fetchWeatherForecast = async () => {
+      try {
+        const response = await axios.get(
+          `http://api.openweathermap.org/data/2.5/forecast?units=Metric&lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`
+        );
+        setWeatherForecast(response.data.list);
+        console.log(weatherForecast);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchWeatherForecast();
+  }, [coordinates]);
+
   return (
     <>
       <h1>
@@ -37,6 +55,7 @@ function WeatherApp() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
       />
+      <DispayWeather weatherForecast={weatherForecast} />
     </>
   );
 }
