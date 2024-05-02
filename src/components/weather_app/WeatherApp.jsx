@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import axios from "axios";
-import DispayWeather from "./DisplayWeather";
+import DisplayWeather from "./DisplayWeather";
+import { Typography, Grid } from "@mui/material";
 
 function WeatherApp() {
   const [input, setInput] = useState("");
@@ -10,9 +11,11 @@ function WeatherApp() {
     longitude: 28.8322923,
   });
   const [weatherForecast, setWeatherForecast] = useState(null);
+
   const handleChange = (event) => {
     setInput(event.target.value);
   };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -24,7 +27,6 @@ function WeatherApp() {
         latitude: filteredResponse[1],
         longitude: filteredResponse[0],
       });
-      console.log(coordinates);
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +39,6 @@ function WeatherApp() {
           `http://api.openweathermap.org/data/2.5/forecast?units=Metric&lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`
         );
         setWeatherForecast(response.data.list);
-        console.log(weatherForecast);
       } catch (error) {
         console.log(error);
       }
@@ -46,17 +47,30 @@ function WeatherApp() {
   }, [coordinates]);
 
   return (
-    <>
-      <h1>
-        {coordinates.latitude} : {coordinates.longitude}
-      </h1>
-      <SearchBar
-        input={input}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
-      <DispayWeather weatherForecast={weatherForecast} />
-    </>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Grid container direction="column" alignItems="center" spacing={3}>
+        <Grid item>
+          <Typography variant="h4">Weather Forecast</Typography>
+        </Grid>
+        <Grid item>
+          <SearchBar
+            input={input}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+          />
+        </Grid>
+        <Grid item>
+          <DisplayWeather weatherForecast={weatherForecast} />
+        </Grid>
+      </Grid>
+    </div>
   );
 }
 

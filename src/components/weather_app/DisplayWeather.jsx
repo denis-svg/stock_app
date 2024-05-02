@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import { AreaChart, Area, XAxis, Tooltip } from "recharts";
+import { Typography, Grid } from "@mui/material";
 
 function DisplayWeather({ weatherForecast }) {
-  if (weatherForecast == null)
-    return (
-      <>
-        <h1>Input a weather forecast</h1>
-      </>
-    );
+  if (weatherForecast === null)
+    return <Typography variant="h4">Input a weather forecast</Typography>;
+
   const [selectedDay, setSelectedDay] = useState(null);
 
-  // Organize forecast data by day
   const organizeDataByDay = () => {
     const days = {};
     weatherForecast.forEach((forecast) => {
-      const date = forecast.dt_txt.split(" ")[0]; // Extract date
+      const date = forecast.dt_txt.split(" ")[0];
       if (!days[date]) {
         days[date] = [];
       }
@@ -23,16 +20,10 @@ function DisplayWeather({ weatherForecast }) {
     return days;
   };
 
-  // Handle day selection
   const handleDayClick = (day) => {
-    if (selectedDay === day) {
-      setSelectedDay(null); // Collapse if already selected
-    } else {
-      setSelectedDay(day);
-    }
+    setSelectedDay(day);
   };
 
-  // Get day of the week
   const getDayOfWeek = (dateString) => {
     const days = [
       "Sunday",
@@ -51,7 +42,7 @@ function DisplayWeather({ weatherForecast }) {
     if (active && payload && payload.length) {
       const forecast = payload[0].payload;
       return (
-        <div className="custom-tooltip">
+        <div style={{ backgroundColor: "white", padding: "5px" }}>
           <p>Time: {forecast.dt_txt.split(" ")[1]}</p>
           <p>Temperature: {forecast.main.temp}°C</p>
           <p>Feels like: {forecast.main.feels_like}°C</p>
@@ -59,46 +50,56 @@ function DisplayWeather({ weatherForecast }) {
         </div>
       );
     }
-
     return null;
   };
 
   const daysData = organizeDataByDay();
 
   return (
-    <>
-      <h1>Weather Forecast</h1>
-      {Object.keys(daysData).map((day) => (
-        <div key={day} onClick={() => handleDayClick(day)}>
-          <h2>
-            {getDayOfWeek(day)}, {day}
-          </h2>
-          {selectedDay === day && (
-            <AreaChart
-              width={600}
-              height={100}
-              data={daysData[day].map((item) => ({
-                ...item,
-                dt_txt: item.dt_txt.slice(0, -3),
-              }))}
-            >
-              <Area
-                type="monotone"
-                dataKey="main.temp"
-                stroke="#ffc602"
-                fill="#fcda66"
-              />
-              <XAxis
-                dataKey="dt_txt"
-                tickFormatter={(timeStr) => timeStr.split(" ")[1]}
-                padding={{ left: 20, right: 20 }}
-              />
-              <Tooltip content={<CustomTooltip />} />
-            </AreaChart>
-          )}
-        </div>
-      ))}
-    </>
+    <Grid container direction="column" alignItems="center" spacing={3}>
+      <Grid item>
+        {selectedDay && (
+          <AreaChart
+            width={600}
+            height={200}
+            data={daysData[selectedDay].map((item) => ({
+              ...item,
+              dt_txt: item.dt_txt.slice(0, -3),
+            }))}
+          >
+            <Area
+              type="monotone"
+              dataKey="main.temp"
+              stroke="#ffc602"
+              fill="#fcda66"
+            />
+            <XAxis
+              dataKey="dt_txt"
+              tickFormatter={(timeStr) => timeStr.split(" ")[1]}
+              padding={{ left: 20, right: 20 }}
+            />
+            <Tooltip content={<CustomTooltip />} />
+          </AreaChart>
+        )}
+      </Grid>
+      <Grid item container direction="row" justifyContent="center" spacing={3}>
+        {Object.keys(daysData).map((day) => (
+          <Grid
+            item
+            key={day}
+            onClick={() => handleDayClick(day)}
+            style={{
+              cursor: "pointer",
+              border: selectedDay === day ? "2px solid blue" : "none",
+              borderRadius: "5px",
+              padding: "5px",
+            }}
+          >
+            <Typography variant="h6">{getDayOfWeek(day)}</Typography>
+          </Grid>
+        ))}
+      </Grid>
+    </Grid>
   );
 }
 
