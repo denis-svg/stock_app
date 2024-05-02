@@ -4,8 +4,10 @@ import axios from "axios";
 import DisplayWeather from "./DisplayWeather";
 import { Typography, Grid } from "@mui/material";
 import { useSelector } from "react-redux";
+import CheckBox from "./CheckBox";
 
 function WeatherApp() {
+  const [isChecked, setIsChecked] = useState(false);
   const [input, setInput] = useState("");
   const [coordinates, setCoordinates] = useState({
     latitude: 47.0245117,
@@ -16,6 +18,9 @@ function WeatherApp() {
   const day = useSelector((state) => state.day);
   const handleChange = (event) => {
     setInput(event.target.value);
+  };
+  const handleCheckBox = (event) => {
+    setIsChecked(event.target.checked);
   };
 
   const handleSubmit = async (event) => {
@@ -36,10 +41,11 @@ function WeatherApp() {
 
   useEffect(() => {
     const fetchWeatherForecast = async () => {
+      let request = `http://api.openweathermap.org/data/2.5/forecast?units=Metric&lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`;
+      if (isChecked)
+        request = `http://api.openweathermap.org/data/2.5/forecast?lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`;
       try {
-        const response = await axios.get(
-          `http://api.openweathermap.org/data/2.5/forecast?units=Metric&lat=${coordinates.latitude}&lon=${coordinates.longitude}&appid=d81494e4e01f95053d7cb99bf842ede5`
-        );
+        const response = await axios.get(request);
         setWeatherForecast(response.data.list);
         setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
       } catch (error) {
@@ -78,9 +84,13 @@ function WeatherApp() {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
           />
+          <CheckBox isChecked={isChecked} handleChange={handleCheckBox} />
         </Grid>
         <Grid item>
-          <DisplayWeather weatherForecast={weatherForecast} />
+          <DisplayWeather
+            weatherForecast={weatherForecast}
+            isChecked={isChecked}
+          />
         </Grid>
       </Grid>
     </div>

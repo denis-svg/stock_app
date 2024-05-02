@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { AreaChart, Area, XAxis, Tooltip } from "recharts";
+import { AreaChart, Area, XAxis, Tooltip, YAxis } from "recharts";
 import { Typography, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setNew } from "../state/daySlice";
 
-function DisplayWeather({ weatherForecast }) {
-  if (weatherForecast === null)
+function DisplayWeather(props) {
+  if (props.weatherForecast === null)
     return <Typography variant="h4">Input a weather forecast</Typography>;
 
   const [selectedDay, setSelectedDay] = useState(null);
   const dispach = useDispatch();
   const organizeDataByDay = () => {
     const days = {};
-    weatherForecast.forEach((forecast) => {
+    props.weatherForecast.forEach((forecast) => {
       const date = forecast.dt_txt.split(" ")[0];
       if (!days[date]) {
         days[date] = [];
@@ -52,8 +52,14 @@ function DisplayWeather({ weatherForecast }) {
           }}
         >
           <p>Time: {forecast.dt_txt.split(" ")[1]}</p>
-          <p>Temperature: {forecast.main.temp}°C</p>
-          <p>Feels like: {forecast.main.feels_like}°C</p>
+          <p>
+            Temperature: {forecast.main.temp}
+            {props.isChecked ? "°F" : "°C"}
+          </p>
+          <p>
+            Feels like: {forecast.main.feels_like}
+            {props.isChecked ? "°F" : "°C"}
+          </p>
           <p>Description: {forecast.weather[0].description}</p>
         </div>
       );
@@ -86,6 +92,7 @@ function DisplayWeather({ weatherForecast }) {
               tickFormatter={(timeStr) => timeStr.split(" ")[1]}
               padding={{ left: 20, right: 20 }}
             />
+            <YAxis />
             <Tooltip content={<CustomTooltip />} />
           </AreaChart>
         )}
