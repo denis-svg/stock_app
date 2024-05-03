@@ -17,7 +17,9 @@ function WeatherApp() {
   const [weatherForecast, setWeatherForecast] = useState(null);
   const [city, setCity] = useState("Chisinau");
   const day = useSelector((state) => state.day);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Track dark mode state
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem("isDarkMode") === "true"
+  ); // Track dark mode state
 
   const handleChange = (event) => {
     setInput(event.target.value);
@@ -29,6 +31,10 @@ function WeatherApp() {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
   };
+
+  useEffect(() => {
+    localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,8 +60,10 @@ function WeatherApp() {
       try {
         const response = await axios.get(request);
         setWeatherForecast(response.data.list);
-        if (input)
+        if (input) {
           setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
+          localStorage.setItem("city", JSON.stringify(city));
+        }
       } catch (error) {
         console.log(error);
       }
