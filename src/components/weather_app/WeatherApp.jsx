@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import DisplayWeather from "./DisplayWeather";
-import { Typography, Grid, IconButton } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
@@ -36,8 +43,33 @@ function WeatherApp() {
     localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 
+  const [savedCities, setSavedCities] = useState([]);
+
+  useEffect(() => {
+    // Filter city keys from local storage
+    const keys = Object.keys(localStorage).filter(
+      (key) => key !== "isDarkMode"
+    );
+    setSavedCities(keys);
+  }, []);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.get(
+        `https://api.geoapify.com/v1/geocode/search?text=${input}&limit=1&apiKey=${"7f59ea1f7f4a40949e9d11a9e5861d58"}`
+      );
+      let filteredResponse = response.data.features[0].geometry.coordinates;
+      setCoordinates({
+        latitude: filteredResponse[1],
+        longitude: filteredResponse[0],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleCityClick = async (clickedCity) => {
+    setInput(clickedCity);
     try {
       const response = await axios.get(
         `https://api.geoapify.com/v1/geocode/search?text=${input}&limit=1&apiKey=${"7f59ea1f7f4a40949e9d11a9e5861d58"}`
@@ -62,7 +94,11 @@ function WeatherApp() {
         setWeatherForecast(response.data.list);
         if (input) {
           setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
-          localStorage.setItem("city", JSON.stringify(city));
+          console.log(localStorage.getItem("city"));
+          localStorage.setItem(
+            input.charAt(0).toUpperCase() + input.toLowerCase().slice(1),
+            JSON.stringify(true)
+          );
         }
       } catch (error) {
         console.log(error);
@@ -121,6 +157,20 @@ function WeatherApp() {
             isChecked={isChecked}
             darkMode={isDarkMode}
           />
+        </Grid>
+        <Grid item>
+          <Typography variant="h5">Saved Cities:</Typography>
+          <List>
+            {savedCities.map((city, index) => (
+              <ListItem
+                key={index}
+                button
+                onClick={() => handleCityClick(city)}
+              >
+                <ListItemText primary={city} />
+              </ListItem>
+            ))}
+          </List>
         </Grid>
       </Grid>
     </div>
