@@ -9,6 +9,7 @@ function DisplayWeather(props) {
     return <Typography variant="h4">Input a weather forecast</Typography>;
 
   const [selectedDay, setSelectedDay] = useState(null);
+  const [initial, setInitial] = useState(false);
   const dispach = useDispatch();
   const organizeDataByDay = () => {
     const days = {};
@@ -19,6 +20,16 @@ function DisplayWeather(props) {
       }
       days[date].push(forecast);
     });
+    if (!initial) {
+      setInitial(true);
+      setSelectedDay(Object.keys(days)[0]);
+      dispach(
+        setNew({
+          day: Object.keys(days)[0],
+          date: getDayOfWeek(Object.keys(days)[0]),
+        })
+      );
+    }
     return days;
   };
 

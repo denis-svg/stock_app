@@ -54,7 +54,8 @@ function WeatherApp() {
       try {
         const response = await axios.get(request);
         setWeatherForecast(response.data.list);
-        setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
+        if (input)
+          setCity(input.charAt(0).toUpperCase() + input.toLowerCase().slice(1));
       } catch (error) {
         console.log(error);
       }
