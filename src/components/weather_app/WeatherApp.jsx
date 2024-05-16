@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import CommentsSection from "./CommentsSection";
+import CommentIcon from "@mui/icons-material/Comment";
 
 function WeatherApp() {
   const [isChecked, setIsChecked] = useState(false);
@@ -110,20 +110,20 @@ function WeatherApp() {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        background: isDarkMode ? "#48494B" : "#fff", // Set background based on dark mode state
-        color: isDarkMode ? "#fff" : "#212121", // Set text color based on dark mode state
+        background: isDarkMode ? "#48494B" : "#fff",
+        color: isDarkMode ? "#fff" : "#212121",
       }}
     >
       <IconButton
         onClick={toggleDarkMode}
-        style={{ position: "absolute", top: "20px", right: "20px" }} // Position button in top right corner
+        style={{ position: "absolute", top: "20px", right: "20px" }}
       >
         <Brightness4Icon />
       </IconButton>
       <IconButton
         component={Link}
         to="/login"
-        style={{ position: "absolute", top: "20px", left: "20px" }} // Position button in top left corner
+        style={{ position: "absolute", top: "20px", left: "20px" }}
       >
         <AccountCircleIcon />
       </IconButton>
@@ -160,6 +160,11 @@ function WeatherApp() {
             isChecked={isChecked}
             darkMode={isDarkMode}
           />
+        </Grid>
+        <Grid item container justifyContent="center">
+          <IconButton component={Link} to="/comments">
+            <CommentIcon />
+          </IconButton>
         </Grid>
       </Grid>
     </div>
