@@ -7,17 +7,37 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
     setError("");
-    console.log("Username:", username);
-    console.log("Password:", password);
-  };
 
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/v1/user/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to register");
+      }
+
+      const data = await response.json();
+      console.log("Registration successful:", data);
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setError("Registration failed. Please try again.");
+    }
+  };
   return (
     <Container maxWidth="sm">
       <Box
