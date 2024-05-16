@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Box } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (password !== confirmPassword) {
@@ -33,6 +33,7 @@ const Register = () => {
 
       const data = await response.json();
       console.log("Registration successful:", data);
+      navigate("/login");
     } catch (error) {
       console.error("Error during registration:", error);
       setError("Registration failed. Please try again.");
