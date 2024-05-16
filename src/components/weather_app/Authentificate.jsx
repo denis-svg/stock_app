@@ -7,16 +7,36 @@ import {
   Box,
   Link as MuiLink,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Authentificate = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = (event) => {
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("Username:", username);
     console.log("Password:", password);
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/v1/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!response.ok) {
+        throw new Error("Login failed. Please check your credentials.");
+      }
+      const data = await response.json();
+      const { accessToken, refreshToken } = data;
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      navigate("/");
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -59,6 +79,11 @@ const Authentificate = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && (
+            <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+              {error}
+            </Typography>
+          )}
           <Typography variant="body2" sx={{ mt: 2 }}>
             Don't have an account?{" "}
             <MuiLink component={Link} to="/register" variant="body2">
