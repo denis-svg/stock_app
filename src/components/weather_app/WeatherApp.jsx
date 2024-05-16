@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CommentsSection from "./CommentsSection";
 
 function WeatherApp() {
   const [isChecked, setIsChecked] = useState(false);
