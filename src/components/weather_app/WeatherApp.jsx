@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import axios from "axios";
 import DisplayWeather from "./DisplayWeather";
-import {
-  Typography,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Typography, Grid, IconButton, Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function WeatherApp() {
   const [isChecked, setIsChecked] = useState(false);
@@ -124,6 +119,13 @@ function WeatherApp() {
       >
         <Brightness4Icon />
       </IconButton>
+      <IconButton
+        component={Link}
+        to="/login"
+        style={{ position: "absolute", top: "20px", left: "20px" }} // Position button in top left corner
+      >
+        <AccountCircleIcon />
+      </IconButton>
       <Grid container direction="column" alignItems="center" spacing={3}>
         <Grid
           item
@@ -157,20 +159,6 @@ function WeatherApp() {
             isChecked={isChecked}
             darkMode={isDarkMode}
           />
-        </Grid>
-        <Grid item>
-          <Typography variant="h5">Saved Cities:</Typography>
-          <List>
-            {savedCities.map((city, index) => (
-              <ListItem
-                key={index}
-                button
-                onClick={() => handleCityClick(city)}
-              >
-                <ListItemText primary={city} />
-              </ListItem>
-            ))}
-          </List>
         </Grid>
       </Grid>
     </div>
