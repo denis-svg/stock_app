@@ -30,7 +30,8 @@ const Authentificate = () => {
         throw new Error("Login failed. Please check your credentials.");
       }
       const data = await response.json();
-      const { accessToken, refreshToken } = data;
+      const accessToken = data["access"];
+      const refreshToken = data["refresh"];
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       navigate("/");
