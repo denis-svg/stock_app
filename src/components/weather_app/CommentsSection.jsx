@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ProtectedRoute from "./ProtectedRoute";
+import HomeIcon from "@mui/icons-material/Home";
+import { Link } from "react-router-dom";
 
 const CommentsSection = () => {
   const [comments, setComments] = useState([]);
@@ -103,10 +105,15 @@ const CommentsSection = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 4 }}>
+      <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
         <Typography variant="h4" gutterBottom>
           Comments
         </Typography>
+        <IconButton component={Link} to="/">
+          <HomeIcon />
+        </IconButton>
+      </Box>
+      <Box sx={{ mt: 4 }}>
         <List>
           {comments.map((comment) => (
             <ListItem key={comment.id} sx={{ display: "flex" }}>
